@@ -1,0 +1,5 @@
+res://scenes/main.tscn
+res://scenes/memory_cell.tscn
+res://scripts/code.gd
+res://resources/bf_highlighter.gd
+res://themes/main.tres

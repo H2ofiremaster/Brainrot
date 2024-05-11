@@ -1,0 +1,11 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://drex1hdgf2dgh"]
+
+[ext_resource type="FontFile" uid="uid://c1tnuv2lf53rd" path="res://themes/JetBrainsMonoNL-Bold.ttf" id="1_5jqpr"]
+
+[resource]
+default_font_size = 24
+CodeEdit/fonts/font = ExtResource("1_5jqpr")
+MarginContainer/constants/margin_bottom = 10
+MarginContainer/constants/margin_left = 10
+MarginContainer/constants/margin_right = 10
+MarginContainer/constants/margin_top = 10

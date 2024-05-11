@@ -1,0 +1,101 @@
+[gd_scene load_steps=5 format=3 uid="uid://diw51la8n5yar"]
+
+[ext_resource type="Theme" uid="uid://drex1hdgf2dgh" path="res://themes/main.tres" id="1_imoro"]
+[ext_resource type="Script" path="res://scripts/memory.gd" id="2_w28gm"]
+[ext_resource type="PackedScene" uid="uid://bic65b7fsnc2m" path="res://scenes/memory_cell.tscn" id="3_tke1e"]
+[ext_resource type="Script" path="res://scripts/code.gd" id="4_r8e0l"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margins" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme = ExtResource("1_imoro")
+
+[node name="MainContainer" type="VBoxContainer" parent="Panel/Margins"]
+layout_mode = 2
+
+[node name="StatusBar" type="HBoxContainer" parent="Panel/Margins/MainContainer"]
+layout_mode = 2
+
+[node name="RunButton" type="Button" parent="Panel/Margins/MainContainer/StatusBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Run
+"
+
+[node name="StepButton" type="Button" parent="Panel/Margins/MainContainer/StatusBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Step"
+
+[node name="ResetButton" type="Button" parent="Panel/Margins/MainContainer/StatusBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Reset"
+
+[node name="Memory" type="ScrollContainer" parent="Panel/Margins/MainContainer"]
+layout_mode = 2
+vertical_scroll_mode = 0
+script = ExtResource("2_w28gm")
+memory_size = 64
+memory_cell = ExtResource("3_tke1e")
+
+[node name="MemoryContainer" type="HBoxContainer" parent="Panel/Margins/MainContainer/Memory"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Code" type="CodeEdit" parent="Panel/Margins/MainContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+line_folding = true
+gutters_draw_breakpoints_gutter = true
+gutters_draw_line_numbers = true
+gutters_draw_fold_gutter = true
+delimiter_strings = Array[String]([])
+auto_brace_completion_enabled = true
+auto_brace_completion_pairs = {
+"[": "]"
+}
+script = ExtResource("4_r8e0l")
+steps_per_frame = null
+
+[node name="IO" type="VBoxContainer" parent="Panel/Margins/MainContainer"]
+layout_mode = 2
+
+[node name="Input" type="LineEdit" parent="Panel/Margins/MainContainer/IO"]
+layout_mode = 2
+placeholder_text = "Input..."
+
+[node name="OutputPanel" type="PanelContainer" parent="Panel/Margins/MainContainer/IO"]
+layout_mode = 2
+
+[node name="OutputMargins" type="MarginContainer" parent="Panel/Margins/MainContainer/IO/OutputPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Output" type="Label" parent="Panel/Margins/MainContainer/IO/OutputPanel/OutputMargins"]
+layout_mode = 2
+
+[connection signal="pressed" from="Panel/Margins/MainContainer/StatusBar/RunButton" to="Panel/Margins/MainContainer/Code" method="_on_run_button_pressed"]
+[connection signal="pressed" from="Panel/Margins/MainContainer/StatusBar/StepButton" to="Panel/Margins/MainContainer/Code" method="_on_step_button_pressed"]
+[connection signal="pressed" from="Panel/Margins/MainContainer/StatusBar/ResetButton" to="Panel/Margins/MainContainer/Code" method="_on_reset_button_pressed"]
+[connection signal="breakpoint_toggled" from="Panel/Margins/MainContainer/Code" to="Panel/Margins/MainContainer/Code" method="_on_breakpoint_toggled"]
+[connection signal="text_changed" from="Panel/Margins/MainContainer/Code" to="Panel/Margins/MainContainer/Code" method="_on_text_changed"]
+[connection signal="text_changed" from="Panel/Margins/MainContainer/IO/Input" to="Panel/Margins/MainContainer/Code" method="_on_input_text_changed"]

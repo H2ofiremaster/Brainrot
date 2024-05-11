@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://bic65b7fsnc2m"]
+
+[ext_resource type="Script" path="res://scripts/memory_cell.gd" id="1_k1wj0"]
+
+[node name="MemoryCell" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k1wj0")
+
+[node name="Margins" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="Container" type="VBoxContainer" parent="Margins"]
+layout_mode = 2
+
+[node name="IndexLabel" type="Label" parent="Margins/Container"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 20
+text = " 0 "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Margins/Container"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Margins/Container"]
+layout_mode = 2
+size_flags_vertical = 1
+text = " 0 "
+horizontal_alignment = 1
+vertical_alignment = 1
