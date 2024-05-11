@@ -41,46 +41,44 @@ func step() -> void:
 	match character:
 		"+": 
 			memory.increment(memory_pointer);
-			increment_instruction_pointer()
+			instruction_pointer += 1;
 		"-": 
 			memory.decrement(memory_pointer);
-			increment_instruction_pointer()
+			instruction_pointer += 1;
 		"<": 
 			memory_pointer -= 1;
 			if memory_pointer < 0:
 				memory_pointer = memory.memory_size - 1;
-			increment_instruction_pointer()
+			instruction_pointer += 1;
 		">": 
 			memory_pointer += 1;
 			if memory_pointer >= memory.memory_size:
 				memory_pointer = 0;
-			increment_instruction_pointer()
+			instruction_pointer += 1;
 			
 		"[":
 			if memory.get_value(memory_pointer) == 0:
 				instruction_pointer = brackets.get(instruction_pointer);
-				update_instruction_pointer_coords();
 			else:
-				increment_instruction_pointer()
+				instruction_pointer += 1;
 		"]":
 			if memory.get_value(memory_pointer) != 0:
 				instruction_pointer = brackets.find_key(instruction_pointer);
-				update_instruction_pointer_coords();
 			else:
-				increment_instruction_pointer()
+				instruction_pointer += 1;
 		",": 
 			var input_char: int = 0;
 			if not input_buffer.is_empty():
 				input_char = input_buffer.pop_front();
 			memory.set_value(memory_pointer, input_char);
-			increment_instruction_pointer()
+			instruction_pointer += 1;
 		".": 
 			output.text += char(memory.get_value(memory_pointer))
 			#print("Printing: '" + char(memory.get_value(memory_pointer)) + "', (" + str(memory.get_value(memory_pointer)) + ")")
-			increment_instruction_pointer()
+			instruction_pointer += 1;
 			
 		_: 
-			increment_instruction_pointer()
+			instruction_pointer += 1;
 	
 	if instruction_pointer < text.length() and not "+-<>[],.".contains(text[instruction_pointer]):
 		#print(text[instruction_pointer])
@@ -147,6 +145,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	#print(Engine.get_frames_per_second());
 	if(last_instruction_pointer_coords != instruction_pointer_coords):
+		update_instruction_pointer_coords();
 		highlighter.update_pointer_pos(instruction_pointer_coords);
 	
 	memory.update_display(memory_pointer);
