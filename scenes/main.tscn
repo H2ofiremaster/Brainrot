@@ -51,7 +51,7 @@ text = "Reset"
 layout_mode = 2
 vertical_scroll_mode = 0
 script = ExtResource("2_w28gm")
-memory_size = 1024
+memory_size = 64
 memory_cell = ExtResource("3_tke1e")
 
 [node name="MemoryContainer" type="HBoxContainer" parent="Panel/Margins/MainContainer/Memory"]
@@ -75,7 +75,7 @@ auto_brace_completion_pairs = {
 "[": "]"
 }
 script = ExtResource("4_r8e0l")
-steps_per_frame = 64.0
+steps_per_frame = 10000.0
 
 [node name="IO" type="VBoxContainer" parent="Panel/Margins/MainContainer/VSplitContainer"]
 layout_mode = 2

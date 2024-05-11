@@ -23,13 +23,8 @@ var memory_pointer: int = 0:
 		memory_pointer = value;
 		memory.selected_cell = value;
 var instruction_pointer: int = 0;
-var instruction_pointer_coords: Vector2i = Vector2i.ZERO:
-	get:
-		return instruction_pointer_coords;
-	set(value):
-		instruction_pointer_coords = value;
-		highlighter.selected_coords = instruction_pointer_coords;
-		queue_redraw()
+var instruction_pointer_coords: Vector2i = Vector2i.ZERO;
+var last_instruction_pointer_coords: Vector2i = Vector2i.ZERO;
 
 var brackets: Dictionary = {};
 
@@ -94,7 +89,7 @@ func step() -> void:
 			increment_instruction_pointer()
 	
 	if instruction_pointer < text.length() and not "+-<>[],.".contains(text[instruction_pointer]):
-		print(text[instruction_pointer])
+		#print(text[instruction_pointer])
 		step()
 	if breakpoints.has(instruction_pointer_coords.y):
 		is_running = false;
@@ -132,20 +127,34 @@ func increment_instruction_pointer():
 
 func update_instruction_pointer_coords():
 	instruction_pointer_coords = Vector2i.ZERO;
-	for i in range(instruction_pointer):
-		#print("i: " + str(i) + ", coords: " + str(instruction_pointer_coords))
-		if text[i] == "\n":
-			instruction_pointer_coords.y += 1;
-			instruction_pointer_coords.x = 0;
-		else:
-			instruction_pointer_coords.x += 1;
+	var index = 0;
+	var text_until_pointer := text.substr(0, instruction_pointer);
+	var lines := text_until_pointer.count("\n");
+	instruction_pointer_coords.y = lines;
+	var split := text_until_pointer.rsplit("\n", true, 1);
+	if split.size() < 2:
+		split[0] = "";
+	var column = instruction_pointer - split[0].length();
+	instruction_pointer_coords.x = column - 1
+	# #print("IP: " + str(instruction_pointer) + ", New: " + str(instruction_pointer_coords), ", split: " + str(split));
+	#instruction_pointer_coords = Vector2i.ZERO;
+	#for i in range(instruction_pointer):
+		# #print("i: " + str(i) + ", coords: " + str(instruction_pointer_coords))
+		#if text[i] == "\n":
+			#instruction_pointer_coords.y += 1;
+			#instruction_pointer_coords.x = 0;
+		#else:
+			#instruction_pointer_coords.x += 1;
+	#print("IP: " + str(instruction_pointer) + ", Old: " + str(instruction_pointer_coords));
 
 # Overrides
 func _ready() -> void:
 	syntax_highlighter = highlighter;
 
 func _process(_delta: float) -> void:
-	print(Engine.get_frames_per_second());
+	#print(Engine.get_frames_per_second());
+	if(last_instruction_pointer_coords != instruction_pointer_coords):
+		highlighter.update_pointer_pos(instruction_pointer_coords);
 	if not is_running: return
 	for _i in range(steps_per_frame):
 		if is_running: step()

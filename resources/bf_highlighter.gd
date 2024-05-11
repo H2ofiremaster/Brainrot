@@ -11,12 +11,12 @@ const CHAR_COLORS = {
 	".": { "color": Color.PURPLE },
 }
 
-var selected_coords: Vector2i = Vector2i.ZERO:
-	get: 
-		return selected_coords;
-	set(value):
-		selected_coords = value;
-		update_cache()
+var selected_coords: Vector2i = Vector2i.ZERO;
+
+func update_pointer_pos(pointer_coords: Vector2i) -> void:
+	selected_coords = pointer_coords;
+	get_text_edit().queue_redraw();
+	update_cache();
 
 func _get_line_syntax_highlighting(line: int) -> Dictionary:
 	var colors = {};
