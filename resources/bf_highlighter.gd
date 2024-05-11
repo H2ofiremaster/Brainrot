@@ -19,8 +19,8 @@ func update_pointer_pos(pointer_coords: Vector2i) -> void:
 	update_cache();
 
 func _get_line_syntax_highlighting(line: int) -> Dictionary:
-	var colors = {};
-	var editor = get_text_edit();
+	var colors := {};
+	var editor := get_text_edit();
 	var line_text: String = editor.get_line(line);
 	
 	colors[0] = _default();
@@ -37,10 +37,10 @@ func _default() -> Dictionary:
 	return { "color": Color.GRAY };
 
 # Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+#func _ready() -> void:
+	#pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+#func _process(delta: float) -> void:
+	#pass

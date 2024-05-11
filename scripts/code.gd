@@ -5,7 +5,6 @@ class_name Code extends CodeEdit
 
 # Nodes
 @onready var memory: Memory = $"../../Memory"
-@onready var timer: Timer = $Timer
 @onready var output: TextEdit = $"../IO/Output"
 @onready var input: LineEdit = $"../IO/Input"
 
@@ -16,12 +15,7 @@ var frame_time: float = 0;
 
 var is_running: bool = false;
 
-var memory_pointer: int = 0:
-	get:
-		return memory_pointer;
-	set(value):
-		memory_pointer = value;
-		memory.selected_cell = value;
+var memory_pointer: int = 0;
 var instruction_pointer: int = 0;
 var instruction_pointer_coords: Vector2i = Vector2i.ZERO;
 var last_instruction_pointer_coords: Vector2i = Vector2i.ZERO;
@@ -43,7 +37,7 @@ func step() -> void:
 		else:
 			reset();
 		return;
-	var character = text[instruction_pointer];
+	var character := text[instruction_pointer];
 	match character:
 		"+": 
 			memory.increment(memory_pointer);
@@ -117,7 +111,7 @@ func update_brackets() -> void:
 		output.text = "Unbalanced brackets: " + str(opening[0]);
 	pass
 
-func increment_instruction_pointer():
+func increment_instruction_pointer() -> void:
 	if text[instruction_pointer] == "\n":
 		instruction_pointer_coords.y += 1;
 		instruction_pointer_coords.x = 0;
@@ -125,16 +119,15 @@ func increment_instruction_pointer():
 		instruction_pointer_coords.x += 1;
 	instruction_pointer += 1
 
-func update_instruction_pointer_coords():
+func update_instruction_pointer_coords() -> void:
 	instruction_pointer_coords = Vector2i.ZERO;
-	var index = 0;
 	var text_until_pointer := text.substr(0, instruction_pointer);
 	var lines := text_until_pointer.count("\n");
 	instruction_pointer_coords.y = lines;
 	var split := text_until_pointer.rsplit("\n", true, 1);
 	if split.size() < 2:
 		split[0] = "";
-	var column = instruction_pointer - split[0].length();
+	var column := instruction_pointer - split[0].length();
 	instruction_pointer_coords.x = column - 1
 	# #print("IP: " + str(instruction_pointer) + ", New: " + str(instruction_pointer_coords), ", split: " + str(split));
 	#instruction_pointer_coords = Vector2i.ZERO;
@@ -155,6 +148,9 @@ func _process(_delta: float) -> void:
 	#print(Engine.get_frames_per_second());
 	if(last_instruction_pointer_coords != instruction_pointer_coords):
 		highlighter.update_pointer_pos(instruction_pointer_coords);
+	
+	memory.update_display(memory_pointer);
+	
 	if not is_running: return
 	for _i in range(steps_per_frame):
 		if is_running: step()
