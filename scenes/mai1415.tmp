@@ -1,11 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://diw51la8n5yar"]
+[gd_scene load_steps=7 format=3 uid="uid://diw51la8n5yar"]
 
 [ext_resource type="Theme" uid="uid://drex1hdgf2dgh" path="res://themes/main.tres" id="1_imoro"]
-[ext_resource type="Script" path="res://scenes/file_manager.gd" id="2_owrgx"]
+[ext_resource type="Script" path="res://scenes/io_handler.gd" id="2_owrgx"]
 [ext_resource type="Script" path="res://scripts/memory.gd" id="2_w28gm"]
 [ext_resource type="Script" path="res://scripts/SaveConfirmationDialog.gd" id="3_csie0"]
 [ext_resource type="PackedScene" uid="uid://bic65b7fsnc2m" path="res://scenes/memory_cell.tscn" id="3_tke1e"]
-[ext_resource type="Script" path="res://scenes/speed_editor.gd" id="4_i887a"]
 [ext_resource type="Script" path="res://scripts/code.gd" id="4_r8e0l"]
 
 [node name="Control" type="Control"]
@@ -58,6 +57,12 @@ item_2/id = 2
 item_3/text = "Open"
 item_3/id = 3
 
+[node name="LoadDialog" type="FileDialog" parent="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton"]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+use_native_dialog = true
+
 [node name="SaveDialog" type="FileDialog" parent="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton"]
 title = "Save Current File"
 initial_position = 2
@@ -66,24 +71,13 @@ access = 2
 filters = PackedStringArray("*.bf, *.b ; Supported Filetypes")
 use_native_dialog = true
 
-[node name="SavePrompt" type="ConfirmationDialog" parent="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton"]
+[node name="SaveConfirmationDialog" type="ConfirmationDialog" parent="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton"]
 title = "Save Changes?"
-initial_position = 2
 size = Vector2i(583, 176)
 ok_button_text = "Save"
 dialog_text = "'%s' has usaved changes. 
 Would you like to save?"
 script = ExtResource("3_csie0")
-
-[node name="LoadDialog" type="FileDialog" parent="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton"]
-title = "Open a File"
-initial_position = 2
-size = Vector2i(562, 218)
-ok_button_text = "Open"
-file_mode = 0
-access = 2
-filters = PackedStringArray("*.bf, *.b ; Supported Filetypes")
-use_native_dialog = true
 
 [node name="VSeparator" type="VSeparator" parent="Panel/Margins/MainContainer/StatusBar/FileContainer"]
 layout_mode = 2
@@ -100,10 +94,8 @@ size_flags_horizontal = 3
 text = "Run"
 
 [node name="SpeedEditor" type="LineEdit" parent="Panel/Margins/MainContainer/StatusBar/RunButtonContainer"]
-visible = false
 layout_mode = 2
 alignment = 1
-script = ExtResource("4_i887a")
 
 [node name="PauseButton" type="Button" parent="Panel/Margins/MainContainer/StatusBar"]
 layout_mode = 2
@@ -166,17 +158,13 @@ placeholder_text = "Output..."
 editable = false
 
 [connection signal="pressed" from="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton" to="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton" method="_on_pressed"]
-[connection signal="id_pressed" from="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton/FileMenu" to="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton" method="_on_file_menu_id_pressed"]
-[connection signal="file_selected" from="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton/SaveDialog" to="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton" method="_on_save_dialog_file_selected"]
-[connection signal="file_selected" from="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton/LoadDialog" to="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton" method="_on_load_dialog_file_selected"]
-[connection signal="gui_input" from="Panel/Margins/MainContainer/StatusBar/RunButtonContainer/RunButton" to="Panel/Margins/MainContainer/StatusBar/RunButtonContainer/SpeedEditor" method="_on_run_button_gui_input"]
+[connection signal="gui_input" from="Panel/Margins/MainContainer/StatusBar/RunButtonContainer/RunButton" to="Panel/Margins/MainContainer/VSplitContainer/Code" method="_on_run_button_gui_input"]
 [connection signal="pressed" from="Panel/Margins/MainContainer/StatusBar/RunButtonContainer/RunButton" to="Panel/Margins/MainContainer/VSplitContainer/Code" method="_on_run_button_pressed"]
-[connection signal="text_submitted" from="Panel/Margins/MainContainer/StatusBar/RunButtonContainer/SpeedEditor" to="Panel/Margins/MainContainer/StatusBar/RunButtonContainer/SpeedEditor" method="_on_text_submitted"]
+[connection signal="text_submitted" from="Panel/Margins/MainContainer/StatusBar/RunButtonContainer/SpeedEditor" to="Panel/Margins/MainContainer/VSplitContainer/Code" method="_on_speed_editor_text_submitted"]
 [connection signal="pressed" from="Panel/Margins/MainContainer/StatusBar/PauseButton" to="Panel/Margins/MainContainer/VSplitContainer/Code" method="_on_pause_button_pressed"]
 [connection signal="pressed" from="Panel/Margins/MainContainer/StatusBar/StepButton" to="Panel/Margins/MainContainer/VSplitContainer/Code" method="_on_step_button_pressed"]
 [connection signal="pressed" from="Panel/Margins/MainContainer/StatusBar/ResetButton" to="Panel/Margins/MainContainer/VSplitContainer/Code" method="_on_reset_button_pressed"]
 [connection signal="breakpoint_toggled" from="Panel/Margins/MainContainer/VSplitContainer/Code" to="Panel/Margins/MainContainer/VSplitContainer/Code" method="_on_breakpoint_toggled"]
-[connection signal="text_changed" from="Panel/Margins/MainContainer/VSplitContainer/Code" to="Panel/Margins/MainContainer/StatusBar/FileContainer/FileButton" method="_on_code_text_changed"]
 [connection signal="text_changed" from="Panel/Margins/MainContainer/VSplitContainer/Code" to="Panel/Margins/MainContainer/VSplitContainer/Code" method="_on_text_changed"]
 [connection signal="text_changed" from="Panel/Margins/MainContainer/VSplitContainer/IO/Input" to="Panel/Margins/MainContainer/VSplitContainer/Code" method="_on_input_text_changed"]
 [connection signal="text_set" from="Panel/Margins/MainContainer/VSplitContainer/IO/Output" to="Panel/Margins/MainContainer/VSplitContainer/Code" method="_on_output_text_set"]

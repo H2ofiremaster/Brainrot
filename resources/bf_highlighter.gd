@@ -28,9 +28,9 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 		if CHAR_COLORS.has(line_text[i]):
 			colors[i] = CHAR_COLORS[line_text[i]];
 			colors[i + 1] = _default();
-		if selected_coords.y == line and selected_coords.x == i :
-			colors[i] = { "color": Color.YELLOW }
-			colors[i + 1] = _default();
+			if selected_coords.y == line and selected_coords.x == i:
+				colors[i] = { "color": Color.YELLOW }
+				colors[i + 1] = _default();
 	return colors;
 
 func _default() -> Dictionary:
